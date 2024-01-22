@@ -58,7 +58,7 @@ export class ProducaoController {
   async obterPedidosPorStatus(
     @Query('status') status: string,
   ): Promise<PedidoRetornoDto[]> {
-    if (status === undefined) {
+    if (status === undefined || status === "") {
       throw new BadRequestException('Status deve ser informado');
     }
     return await this.producaoService.obterPorStatus(status);

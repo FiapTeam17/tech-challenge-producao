@@ -21,14 +21,14 @@ Before(async function (this: Context) {
 When(
   'é enviado o nome do status incorreto do {string}',
   async function (this: Context, rota: string) {
-    this.response = await request(this.app.getHttpServer()).post(rota);
+    this.response = await request(this.app.getHttpServer()).get(rota);
   },
 );
 
 When(
   'é enviado vazio no nome do status do {string}',
   async function (this: Context, rota: string) {
-    this.response = await request(this.app.getHttpServer()).post(rota);
+    this.response = await request(this.app.getHttpServer()).get(rota);
   },
 );
 

@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { StatusPedidoEnumMapper } from '../../types';
 import { PedidoDto } from '../../dtos';
+import { ClienteModel, PedidoItemModel } from '../models';
 
 @Entity('Pedido')
 export class PedidoModel {
@@ -26,6 +27,13 @@ export class PedidoModel {
     nullable: true,
   })
   observacao?: string;
+
+  @ManyToOne(() => ClienteModel, (cliente) => cliente.pedidos, { nullable: true })
+  cliente?: ClienteModel;
+
+  @OneToMany(() => PedidoItemModel, (item) => item.pedido)
+  //@JoinTable()
+  itens?: PedidoItemModel[];
 
   constructor(pedidoDto?: PedidoDto) {
     if (pedidoDto) {

@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Módulo de Pedidos')
+    .setTitle('Módulo de Produção')
     .setDescription('API responsável por acompanhar a produção/fila de pedidos')
     .setVersion('1.0')
     .addTag('produção')

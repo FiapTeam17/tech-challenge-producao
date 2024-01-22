@@ -6,8 +6,7 @@ import { PedidoDto } from '../dtos';
 import { PedidoStatusEnum, StatusPedidoEnumMapper } from '../types';
 
 export class ProducaoMySqlRepositoryGateway
-  implements IProducaoRepositoryGateway
-{
+  implements IProducaoRepositoryGateway {
   private pedidoRepository: Repository<PedidoModel>;
   // private pagamentoRepository: Repository<PagamentoModel>;
 
@@ -64,9 +63,8 @@ export class ProducaoMySqlRepositoryGateway
 
   async obterPorId(pedidoId: number): Promise<PedidoDto> {
     try {
-      const pedidoEntity = await this.pedidoRepository
-        .createQueryBuilder('ped')
-        .where('ped.Id = :id', {
+      const pedidoEntity = await this.pedidoRepository.createQueryBuilder('ped').where('ped.Id = :id', 
+        {
           id: pedidoId,
         })
         .leftJoinAndSelect('ped.cliente', 'cli')
