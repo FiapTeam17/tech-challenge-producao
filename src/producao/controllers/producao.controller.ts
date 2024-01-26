@@ -3,16 +3,18 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Inject,
   Logger,
   Param,
   Patch,
-  Query,
+  Post,
 } from '@nestjs/common';
 import { ProducaoService } from '../services';
 import { DATA_SOURCE } from '../../common/constants';
 import { DataSource } from 'typeorm';
 import {
+  PedidoCriarDto,
   PedidoEmAndamentoDto,
   PedidoRetornoDto,
   PedidoStatusDto,
@@ -27,40 +29,30 @@ export class ProducaoController {
     this.producaoService = new ProducaoService(this.dataSource, this.logger);
   }
 
+  @Post('/receberPedido')
+  @HttpCode(201)
+  async receberPedido(@Body() pedidoDto: PedidoCriarDto): Promise<void> {
+    await this.producaoService.receberPedido(pedidoDto);
+  }
+
   @Get('/andamento')
   async obterEmAndamento(): Promise<PedidoEmAndamentoDto[]> {
     return await this.producaoService.obterEmAndamento();
   }
 
-  @Get('/:id')
-  async obterPorId(@Param('id') id: number): Promise<PedidoRetornoDto> {
-    const pedido = await this.producaoService.obterPorId(id);
-    return pedido;
-  }
-
   @Patch('/:id/status')
-  async atualizarStatus(
-    @Param('id') id: number,
-    @Body() pedidoDto: PedidoStatusDto,
-  ): Promise<void> {
+  async atualizarStatus(@Param('id') id: number, @Body() pedidoDto: PedidoStatusDto): Promise<void> {
     if (pedidoDto.status === undefined) {
       throw new BadRequestException('Status deve ser informado');
     }
     await this.producaoService.atualizarStatus(
       id,
-      StatusPedidoEnumMapper.stringParaEnum(
-        pedidoDto.status as unknown as string,
-      ),
+      StatusPedidoEnumMapper.stringParaEnum(pedidoDto.status as unknown as string),
     );
   }
 
-  @Get()
-  async obterPedidosPorStatus(
-    @Query('status') status: string,
-  ): Promise<PedidoRetornoDto[]> {
-    if (status === undefined || status === "") {
-      throw new BadRequestException('Status deve ser informado');
-    }
-    return await this.producaoService.obterPorStatus(status);
+  @Get('/obterPedidos')
+  async obterPedidos(): Promise<PedidoRetornoDto[]> {
+    return await this.producaoService.obterPedidos();
   }
 }

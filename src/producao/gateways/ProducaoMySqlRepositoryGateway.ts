@@ -1,20 +1,37 @@
 import { DataSource, Repository } from 'typeorm';
 import { IProducaoRepositoryGateway } from '../interfaces';
-import { PedidoModel } from './models';
-import { InternalServerErrorException, Logger } from '@nestjs/common';
-import { PedidoDto } from '../dtos';
+import { PedidoItemModel, PedidoModel } from './models';
+import { InternalServerErrorException, Logger, Optional } from '@nestjs/common';
+import { PedidoDto, PedidoRetornoDto } from '../dtos';
 import { PedidoStatusEnum, StatusPedidoEnumMapper } from '../types';
 
-export class ProducaoMySqlRepositoryGateway
-  implements IProducaoRepositoryGateway {
+export class ProducaoMySqlRepositoryGateway implements IProducaoRepositoryGateway {
   private pedidoRepository: Repository<PedidoModel>;
-  // private pagamentoRepository: Repository<PagamentoModel>;
+  private pedidoItemRepository: Repository<PedidoItemModel>;
 
-  constructor(
-    private dataSource: DataSource,
-    private logger: Logger,
-  ) {
+  constructor(private dataSource: DataSource, private logger: Logger) {
     this.pedidoRepository = this.dataSource.getRepository(PedidoModel);
+    this.pedidoItemRepository = this.dataSource.getRepository(PedidoItemModel);
+  }
+
+  async receberPedido(pedido: PedidoDto): Promise<void> {
+    try {
+      const pedidoEntity = new PedidoModel(pedido);
+      const pedidoEntityCreated = await this.pedidoRepository.save(pedidoEntity);
+
+      if (pedidoEntity.itens) {
+        for (let i = 0; i < pedidoEntity.itens.length; i++) {
+          const item = pedidoEntity.itens[i];
+          item.pedido = pedidoEntityCreated;
+          await this.pedidoItemRepository.save(item);
+        }
+      }
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException(
+        'Não foi possível se conectar ao banco de dados!',
+      );
+    }
   }
 
   async atualizarStatus(pedido: PedidoDto): Promise<void> {
@@ -40,12 +57,11 @@ export class ProducaoMySqlRepositoryGateway
         .where('ped.status in(:...status)', {
           status: [
             StatusPedidoEnumMapper.enumParaNumber(PedidoStatusEnum.RECEBIDO),
-            StatusPedidoEnumMapper.enumParaNumber(
-              PedidoStatusEnum.EM_PREPARACAO,
-            ),
+            StatusPedidoEnumMapper.enumParaNumber(PedidoStatusEnum.EM_PREPARACAO),
             StatusPedidoEnumMapper.enumParaNumber(PedidoStatusEnum.PRONTO),
           ],
         })
+        .leftJoinAndSelect('ped.itens', 'item')
         .getMany();
 
       pedidoEntity.forEach((pe) => {
@@ -63,14 +79,12 @@ export class ProducaoMySqlRepositoryGateway
 
   async obterPorId(pedidoId: number): Promise<PedidoDto> {
     try {
-      const pedidoEntity = await this.pedidoRepository.createQueryBuilder('ped').where('ped.Id = :id', 
-        {
-          id: pedidoId,
-        })
-        .leftJoinAndSelect('ped.cliente', 'cli')
+      const pedidoEntity = await this.pedidoRepository.createQueryBuilder('ped')
+        .where('ped.Id = :id',
+          {
+            id: pedidoId,
+          })
         .leftJoinAndSelect('ped.itens', 'item')
-        .leftJoinAndSelect('item.produto', 'prod')
-        .leftJoinAndSelect('item.pedido', 'peditem')
         .getOne();
       return pedidoEntity?.getDto();
     } catch (e) {
@@ -81,17 +95,14 @@ export class ProducaoMySqlRepositoryGateway
     }
   }
 
-  async obterPorStatus(status: PedidoStatusEnum): Promise<PedidoDto[]> {
+  async obterPedidos(): Promise<PedidoDto[]> {
     try {
       const pedidos: PedidoDto[] = [];
-      const pedidoEntity = await this.pedidoRepository
-        .createQueryBuilder('ped')
-        .where('ped.status = :status', {
-          status: StatusPedidoEnumMapper.enumParaString(status),
-        })
+      const pedidoEntity = await this.pedidoRepository.createQueryBuilder('ped')
+        .leftJoinAndSelect('ped.itens', 'item')
         .getMany();
 
-      pedidoEntity.forEach((pe) => {
+      pedidoEntity.forEach(pe => {
         pedidos.push(pe.getDto());
       });
 

@@ -1,6 +1,7 @@
 import { PedidoStatusEnum } from '../types';
-import { PedidoDto } from '../dtos';
+import { PedidoDto, PedidoItemDto } from '../dtos';
 import { BadRequestException } from '@nestjs/common';
+import { PedidoItemEntity } from './PedidoItemEntity';
 
 export class PedidoEntity {
   get dataCadastro(): Date | undefined {
@@ -42,13 +43,32 @@ export class PedidoEntity {
     this._status = value;
   }
 
+  get itens(): PedidoItemEntity[] | undefined {
+    return this._itens;
+  }
+
+  set itens(value: PedidoItemEntity[] | undefined) {
+    this._itens = value;
+  }
+
+  get identificacaoPedido(): string | undefined {
+    return this._identificacaoPedido;
+  }
+
+  set identificacaoPedido(value: string) {
+    this._identificacaoPedido = value;
+  }
+
   constructor(
     private _id?: number,
     private _observacao?: string,
     private _status?: PedidoStatusEnum,
     private _dataCadastro?: Date,
     private _dataConclusao?: Date,
-  ) {}
+    private _itens?: PedidoItemEntity[],
+
+    private _identificacaoPedido?: string,
+  ) { }
 
   static getInstancia(id: number, status: PedidoStatusEnum): PedidoEntity {
     const pedido = new PedidoEntity();
@@ -133,10 +153,22 @@ export class PedidoEntity {
   }
 
   public toPedidoDto(): PedidoDto {
+
+    const itens = this.itens?.map(i => {
+      return new PedidoItemDto(
+        i.quantidade,
+        i._nomeProduto,
+        i.idProduto,
+        i.pedido.id,
+        i.id
+      );
+    });
+
     return new PedidoDto(
+      this.identificacaoPedido,
       this.status as never,
       this.dataCadastro as never,
-      null,
+      itens,
       this.observacao,
       this.dataConclusao,
       this.id,
@@ -151,6 +183,16 @@ export class PedidoEntity {
       pedidoDto.dataCadastro,
       pedidoDto.dataConclusao,
     );
+
+    pedido.itens = pedidoDto.itens?.map(i => {
+      return new PedidoItemEntity(
+        i.id,
+        pedido,
+        i.quantidade,
+        i.idProduto,
+        i.nomeProduto
+      );
+    });
 
     return pedido;
   }

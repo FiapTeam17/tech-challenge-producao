@@ -2,19 +2,21 @@ import {
   IAtualizarStatusPedidoUseCase,
   IObterPedidoUseCase,
   IProducaoRepositoryGateway,
+  IReceberPedidoUseCase,
 } from '../interfaces';
 import { DataSource } from 'typeorm';
 import { Logger } from '@nestjs/common';
 import { ProducaoMySqlRepositoryGateway } from '../gateways';
 
-import { AtualizarStatusPedidoUseCase, ObterPedidoUseCase } from '../usecases';
-import { PedidoEmAndamentoDto, PedidoRetornoDto } from '../dtos';
+import { AtualizarStatusPedidoUseCase, ObterPedidoUseCase, ReceberPedidoUseCase } from '../usecases';
+import { PedidoCriarDto, PedidoEmAndamentoDto, PedidoRetornoDto } from '../dtos';
 import { PedidoStatusEnum } from '../types';
 
 export class ProducaoService {
   private readonly producaoRepositoryGateway: IProducaoRepositoryGateway;
   private readonly obterPedidoUseCase: IObterPedidoUseCase;
   private readonly atualizarStatusPedidoUseCase: IAtualizarStatusPedidoUseCase;
+  private readonly receberPedidoUseCase: IReceberPedidoUseCase;
 
   constructor(
     private dataSource: DataSource,
@@ -34,27 +36,26 @@ export class ProducaoService {
       this.producaoRepositoryGateway,
       logger,
     );
-  }
 
-  async obterPorId(id: number): Promise<PedidoRetornoDto> {
-    return await this.obterPedidoUseCase.obterPorId(id);
+    this.receberPedidoUseCase = new ReceberPedidoUseCase(
+      this.producaoRepositoryGateway,
+      logger,
+    );
   }
 
   async obterEmAndamento(): Promise<PedidoEmAndamentoDto[]> {
     return await this.obterPedidoUseCase.obterEmAndamento();
   }
 
-  async obterPorStatus(status: string): Promise<PedidoRetornoDto[]> {
-    return await this.obterPedidoUseCase.obterPorStatus(status);
+  async obterPedidos(): Promise<PedidoRetornoDto[]> {
+    return await this.obterPedidoUseCase.obterPedidos();
   }
 
-  async atualizarStatus(
-    pedidoId: number,
-    status: PedidoStatusEnum,
-  ): Promise<void> {
-    return await this.atualizarStatusPedidoUseCase.atualizarStatus(
-      pedidoId,
-      status,
-    );
+  async atualizarStatus(pedidoId: number, status: PedidoStatusEnum,): Promise<void> {
+    return await this.atualizarStatusPedidoUseCase.atualizarStatus(pedidoId, status,);
+  }
+
+  async receberPedido(pedido: PedidoCriarDto): Promise<void> {
+    return await this.receberPedidoUseCase.receberPedido(pedido);
   }
 }

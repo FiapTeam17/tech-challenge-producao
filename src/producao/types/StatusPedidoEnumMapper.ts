@@ -70,14 +70,4 @@ export class StatusPedidoEnumMapper {
         throw new InternalServerErrorException('Status Inválido');
     }
   }
-
-  static numberParaString(codigo?: number): string {
-    const enumStatus = StatusPedidoEnumMapper.numberParaEnum(codigo);
-    return StatusPedidoEnumMapper.enumParaString(enumStatus);
-  }
-
-  static stringParaNumber(codigo?: string): number {
-    const enumStatus = StatusPedidoEnumMapper.stringParaEnum(codigo);
-    return StatusPedidoEnumMapper.enumParaNumber(enumStatus);
-  }
 }

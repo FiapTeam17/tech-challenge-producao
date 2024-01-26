@@ -8,10 +8,16 @@ export class PedidoItemCriarDto {
   public quantidade?: number;
 
   @ApiProperty({
-    description: 'Identificador do Produto',
-    example: '123456',
+    description: 'Id do Produto',
+    example: '1',
   })
   public produtoId?: number;
+
+  @ApiProperty({
+    description: 'Nome do produto',
+    example: 'Coca',
+  })
+  public nomeProduto: string;
 }
 
 export class PedidoCriarDto {
@@ -22,10 +28,29 @@ export class PedidoCriarDto {
   public readonly observacao?: string;
 
   @ApiProperty({
-    description: 'Cliente',
-    example: '123456',
+    description: 'Data Cadastro',
+    example: '2024-01-25 02:22:49',
   })
-  public readonly clienteId?: number;
+  public readonly dataCadastro?: Date;
+
+  @ApiProperty({
+    description: 'Status do pedido',
+    example: '0',
+  })
+  public readonly status?: number;
+
+  @ApiProperty({
+    description: 'Identificacao do Pedido',
+    example: '98776755454',
+  })
+  public readonly identificacaoPedido?: string;
+
+
+  @ApiProperty({
+    description: 'Numero do pedido',
+    example: '1',
+  })
+  public readonly id?: number;
 
   @ApiProperty({
     description: 'Itens do Pedido',

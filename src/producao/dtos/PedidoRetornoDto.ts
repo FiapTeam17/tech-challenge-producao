@@ -16,42 +16,36 @@ export class PedidoItemRetornoDto {
   public quantidade?: number;
 
   @ApiProperty({
-    description: 'Valor Unitário do Item',
-    example: '5.6',
+    description: 'Nome do Produto',
+    example: 'Guaraná',
   })
-  public valorUnitario?: number;
+  public nomeProduto?: string;
 
   @ApiProperty({
-    description: 'Valor Total do Item',
-    example: '5.6',
+    description: 'Id do produto',
+    example: '5',
   })
-  public valorTotal?: number;
+  public idProduto?: number;
 
   @ApiProperty({
-    description: 'Identificador do Produto',
+    description: 'Id do Pedido',
     example: '123456',
   })
-  public produtoId?: number;
+  public pedidoId?: number;
 }
 
 export class PedidoRetornoDto {
   @ApiProperty({
-    description: 'Identificador',
+    description: 'Identificador do pedido',
     example: '123456',
   })
-  public readonly id?: number;
+  public readonly identificadorPedido?: string;
 
   @ApiProperty({
     description: 'Observação',
     example: 'Sem cebola',
   })
   public readonly observacao?: string;
-
-  @ApiProperty({
-    description: 'Cliente',
-    example: '123456',
-  })
-  public readonly clienteId?: number;
 
   @ApiProperty({
     description: 'Status',
@@ -72,6 +66,7 @@ export class PedidoRetornoDto {
   static getInstance(pedido: PedidoDto): PedidoRetornoDto {
     return {
       id: pedido.id,
+      identificadorPedido: pedido.identificacaoPedido,
       observacao: pedido.observacao,
       status: pedido.status,
       itens: pedido.itens?.map((i) => PedidoRetornoDto.getItemInstance(i)),
@@ -82,8 +77,9 @@ export class PedidoRetornoDto {
     return {
       id: item.id,
       quantidade: item.quantidade,
-      valorUnitario: item.valorUnitario,
-      valorTotal: item.valorTotal,
+      idProduto: item.idProduto,
+      nomeProduto: item.nomeProduto,
+      pedidoId: item.pedidoId,
     };
   }
 }

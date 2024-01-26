@@ -1,6 +1,7 @@
 import { PedidoEntity } from '../entities';
 import { PedidoStatusEnum } from '../types';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
+import { PedidoItemDto } from './PedidoDto';
 
 export class PedidoEmAndamentoDto {
   @ApiProperty({
@@ -40,11 +41,29 @@ export class PedidoEmAndamentoDto {
   })
   public readonly tempoEspera?: number;
 
+  @ApiProperty({
+    description: 'Itens do Pedido',
+    type: 'array',
+    items: {
+      oneOf: [{ $ref: getSchemaPath(PedidoItemDto) }],
+    },
+  })
+  public readonly itens: PedidoItemDto[];
+
   constructor(pedido: PedidoEntity) {
     this.id = pedido.id;
     this.observacao = pedido.observacao;
     this.status = pedido.status;
     this.dataCadastro = pedido.dataCadastro;
     this.tempoEspera = pedido.tempoEspera();
+    this.itens = pedido.itens.map(i => {
+      return new PedidoItemDto(
+        i._quantidade,
+        i._nomeProduto,
+        i.idProduto,
+        i.pedido.id,
+        i.id
+      )
+    })
   }
 }

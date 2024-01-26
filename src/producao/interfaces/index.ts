@@ -1,4 +1,4 @@
 export * from './IAtualizarStatusPedidoUseCase';
-export * from './ICriarPedidoUseCase';
+export * from './IReceberPedidoUseCase';
 export * from './IObterPedidoUseCase';
 export * from './IProducaoRepositoryGateway';

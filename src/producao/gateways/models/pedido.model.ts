@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { StatusPedidoEnumMapper } from '../../types';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { PedidoDto } from '../../dtos';
-import { ClienteModel, PedidoItemModel } from '../models';
+import { PedidoItemModel } from '../models';
+import { StatusPedidoEnumMapper } from '../../types';
 
 @Entity('Pedido')
 export class PedidoModel {
@@ -28,8 +28,10 @@ export class PedidoModel {
   })
   observacao?: string;
 
-  @ManyToOne(() => ClienteModel, (cliente) => cliente.pedidos, { nullable: true })
-  cliente?: ClienteModel;
+  @Column({
+    nullable: true,
+  })
+  identificacaoPedido?: string;
 
   @OneToMany(() => PedidoItemModel, (item) => item.pedido)
   //@JoinTable()
@@ -41,6 +43,8 @@ export class PedidoModel {
       this.observacao = pedidoDto.observacao;
       this.dataCadastro = pedidoDto.dataCadastro as never;
       this.dataConclusao = pedidoDto.dataConclusao;
+      this.identificacaoPedido = pedidoDto.identificacaoPedido;
+      this.itens = pedidoDto.itens?.map(i => new PedidoItemModel(i, this));
       const status = pedidoDto.status;
       if (status !== undefined) {
         this.status = StatusPedidoEnumMapper.enumParaNumber(status);
@@ -49,10 +53,14 @@ export class PedidoModel {
   }
 
   public getDto(): PedidoDto {
+
+    const itens = this.itens?.map(i => i.getDto());
+
     return new PedidoDto(
+      this.identificacaoPedido,
       StatusPedidoEnumMapper.numberParaEnum(this.status),
       this.dataCadastro,
-      null,
+      itens,
       this.observacao,
       this.dataConclusao,
       this.id,

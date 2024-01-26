@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<testsuite failures="0" skipped="0" name="cucumber-js" time="11.633384478000004" tests="8">
+  <testcase classname="Pedidos - Produção" name="Valida nome do status" time="2.0004326100000003">
+    <system-out><![CDATA[Given os dados '{}'.......................................................passed
+When é enviado para "/pedidos/2/status"...................................passed
+Then status do retorno é '400'............................................passed
+And a mensagem de retorno é 'Status deve ser informado'...................passed]]></system-out>
+  </testcase>
+  <testcase classname="Pedidos - Produção" name="Valida nome do status [1]" time="2.1719928040000003">
+    <system-out><![CDATA[Given os dados '{"status":"RECEBIDO"}'....................................passed
+When é enviado para "/pedidos/2/status"...................................passed
+Then status do retorno é '200'............................................passed
+And a mensagem de retorno é ''............................................passed]]></system-out>
+  </testcase>
+  <testcase classname="Pedidos - Produção" name="Valida nome do status [2]" time="2.132765902">
+    <system-out><![CDATA[Given os dados '{"status":"TESTE"}'.......................................passed
+When é enviado para "/pedidos/2/status"...................................passed
+Then status do retorno é '500'............................................passed
+And a mensagem de retorno é 'Status Inválido'.............................passed]]></system-out>
+  </testcase>
+  <testcase classname="Pedidos - Produção" name="Valida nome do status [3]" time="2.2696280990000006">
+    <system-out><![CDATA[Given os dados '{"status":""}'............................................passed
+When é enviado para "/pedidos/2/status"...................................passed
+Then status do retorno é '500'............................................passed
+And a mensagem de retorno é 'Status Inválido'.............................passed]]></system-out>
+  </testcase>
+  <testcase classname="Pedidos - Produção" name="Valida nome do status [4]" time="2.3735962949999996">
+    <system-out><![CDATA[Given os dados '{"status":"RECEBIDO"}'....................................passed
+When é enviado para "/pedidos/2/status"...................................passed
+Then status do retorno é '400'............................................passed
+And a mensagem de retorno é 'O status do pedido não permite essa altera...passed]]></system-out>
+  </testcase>
+  <testcase classname="Pedidos - Produção" name="Valida retorno dos pedidos em andamento" time="0.239510188">
+    <system-out><![CDATA[When é enviado para GET "/pedidos/andamento"..............................passed
+Then status do retorno é '200'............................................passed
+And a quantidade de registros retornados é 2..............................passed]]></system-out>
+  </testcase>
+  <testcase classname="Pedidos - Produção" name="Valida retorno dos pedidos" time="0.12069519399999999">
+    <system-out><![CDATA[When é enviado para GET "/pedidos/obterPedidos"...........................passed
+Then status do retorno é '200'............................................passed
+And a quantidade de registros retornados é 4..............................passed]]></system-out>
+  </testcase>
+  <testcase classname="Pedidos - Produção" name="Receber pedido do módulo de pedido" time="0.32476338600000004">
+    <system-out><![CDATA[Given os dados '{"observacao": "Sem cebola","dataCadastro": "2024-01-25...passed
+When é criado um novo registro para "/pedidos/receberPedido"..............passed
+Then status do retorno é '201'............................................passed
+And a mensagem de retorno é ''............................................passed]]></system-out>
+  </testcase>
+</testsuite>
