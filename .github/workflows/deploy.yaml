@@ -28,8 +28,6 @@ jobs:
           args: >
             -Dsonar.organization=tech-challenge
             -Dsonar.projectKey=tech-challenge-producao
-            -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.sources=lib/
             -Dsonar.test.exclusions=tests/**
             -Dsonar.tests=tests/
             -Dsonar.verbose=true
