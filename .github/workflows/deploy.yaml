@@ -22,13 +22,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TECH_CHALLENGE_SONAR }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: .
+          projectBaseDir: ./
           args: >
             -Dsonar.organization=tech-challenge
             -Dsonar.projectKey=tech-challenge-producao
             -Dsonar.sources=lib/
             -Dsonar.test.exclusions=tests/**
-            -Dsonar.tests=tests/
             -Dsonar.verbose=true
   build:
     name: Build Image
