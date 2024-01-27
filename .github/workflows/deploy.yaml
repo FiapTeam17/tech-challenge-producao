@@ -21,14 +21,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TECH_CHALLENGE_SONAR }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: ./
-          args: >
-            -Dsonar.organization=tech-challenge
-            -Dsonar.projectKey=tech-challenge-producao
-            -Dsonar.sources=lib/
-            -Dsonar.test.exclusions=tests/**
-            -Dsonar.verbose=true
   build:
     name: Build Image
     runs-on: ubuntu-latest
