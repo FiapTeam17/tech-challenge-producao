@@ -11,12 +11,16 @@ import { ProducaoMySqlRepositoryGateway } from '../gateways';
 import { AtualizarStatusPedidoUseCase, ObterPedidoUseCase, ReceberPedidoUseCase } from '../usecases';
 import { PedidoCriarDto, PedidoEmAndamentoDto, PedidoRetornoDto } from '../dtos';
 import { PedidoStatusEnum } from '../types';
+import { ISqsGateway } from '../interfaces/ISqsGateway';
+import { AwsConfigService } from '../../config/aws';
+import { SqsGateway } from '../gateways/SqsGateway';
 
 export class ProducaoService {
   private readonly producaoRepositoryGateway: IProducaoRepositoryGateway;
   private readonly obterPedidoUseCase: IObterPedidoUseCase;
   private readonly atualizarStatusPedidoUseCase: IAtualizarStatusPedidoUseCase;
   private readonly receberPedidoUseCase: IReceberPedidoUseCase;
+  private readonly sqsGateway: ISqsGateway;
 
   constructor(
     private dataSource: DataSource,
@@ -32,8 +36,12 @@ export class ProducaoService {
       logger,
     );
 
+    let awsConfigService = new AwsConfigService();
+    this.sqsGateway = new SqsGateway(awsConfigService);
+
     this.atualizarStatusPedidoUseCase = new AtualizarStatusPedidoUseCase(
       this.producaoRepositoryGateway,
+      this.sqsGateway,
       logger,
     );
 
