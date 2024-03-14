@@ -35,6 +35,6 @@ export class AtualizarStatusPedidoUseCase implements IAtualizarStatusPedidoUseCa
       status: StatusPedidoEnumMapper.enumParaString(pedido.getStatus())
     };
 
-    await this.sqsGateway.sendMessage(`Pedido${pedido.id}`, this.sqsUrl.concat("producao-to-pedido-atualiza-status.fifo"), filaProducao);
+    await this.sqsGateway.sendMessage(`Pedido${pedido.id}`, this.sqsUrl.concat("pedido-to-producao-atualiza-status.fifo"), filaProducao);
   }
 }
