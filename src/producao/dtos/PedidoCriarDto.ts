@@ -28,29 +28,17 @@ export class PedidoCriarDto {
   public readonly observacao?: string;
 
   @ApiProperty({
-    description: 'Data Cadastro',
-    example: '2024-01-25 02:22:49',
-  })
-  public readonly dataCadastro?: Date;
-
-  @ApiProperty({
-    description: 'Status do pedido',
-    example: '0',
-  })
-  public readonly status?: number;
-
-  @ApiProperty({
     description: 'Identificacao do Pedido',
     example: '98776755454',
   })
-  public readonly identificacaoPedido?: string;
+  public readonly identificacao?: string;
 
 
   @ApiProperty({
     description: 'Numero do pedido',
     example: '1',
   })
-  public readonly id?: number;
+  public readonly numero?: number;
 
   @ApiProperty({
     description: 'Itens do Pedido',

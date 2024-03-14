@@ -13,12 +13,7 @@ import {
 import { ProducaoService } from '../services';
 import { DATA_SOURCE } from '../../common/constants';
 import { DataSource } from 'typeorm';
-import {
-  PedidoCriarDto,
-  PedidoEmAndamentoDto,
-  PedidoRetornoDto,
-  PedidoStatusDto,
-} from '../dtos';
+import { PedidoCriarDto, PedidoEmAndamentoDto, PedidoRetornoDto, PedidoStatusDto } from '../dtos';
 import { StatusPedidoEnumMapper } from '../types';
 
 @Controller('/pedidos')
@@ -29,10 +24,10 @@ export class ProducaoController {
     this.producaoService = new ProducaoService(this.dataSource, this.logger);
   }
 
-  @Post('/receberPedido')
+  @Post('')
   @HttpCode(201)
   async receberPedido(@Body() pedidoDto: PedidoCriarDto): Promise<void> {
-    await this.producaoService.receberPedido(pedidoDto);
+    return await this.producaoService.receberPedido(pedidoDto);
   }
 
   @Get('/andamento')

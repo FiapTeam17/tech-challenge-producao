@@ -5,14 +5,12 @@ export class StatusPedidoEnumMapper {
   static numberParaEnum(codigo?: number): PedidoStatusEnum {
     switch (codigo) {
       case 0:
-        return PedidoStatusEnum.AGUARDANDO_CONFIRMACAO_PAGAMENTO;
-      case 1:
         return PedidoStatusEnum.RECEBIDO;
-      case 2:
+      case 1:
         return PedidoStatusEnum.EM_PREPARACAO;
-      case 3:
+      case 2:
         return PedidoStatusEnum.PRONTO;
-      case 4:
+      case 3:
         return PedidoStatusEnum.FINALIZADO;
       default:
         throw new InternalServerErrorException('Status Inválido');
@@ -21,8 +19,6 @@ export class StatusPedidoEnumMapper {
 
   static stringParaEnum(opcao?: string): PedidoStatusEnum {
     switch (opcao) {
-      case 'AGUARDANDO_CONFIRMACAO_PAGAMENTO':
-        return PedidoStatusEnum.AGUARDANDO_CONFIRMACAO_PAGAMENTO;
       case 'RECEBIDO':
         return PedidoStatusEnum.RECEBIDO;
       case 'EM_PREPARACAO':
@@ -38,8 +34,6 @@ export class StatusPedidoEnumMapper {
 
   static enumParaString(status?: PedidoStatusEnum): string {
     switch (status) {
-      case PedidoStatusEnum.AGUARDANDO_CONFIRMACAO_PAGAMENTO:
-        return 'AGUARDANDO_CONFIRMACAO_PAGAMENTO';
       case PedidoStatusEnum.RECEBIDO:
         return 'RECEBIDO';
       case PedidoStatusEnum.EM_PREPARACAO:
@@ -55,16 +49,14 @@ export class StatusPedidoEnumMapper {
 
   static enumParaNumber(status?: PedidoStatusEnum): number {
     switch (status) {
-      case PedidoStatusEnum.AGUARDANDO_CONFIRMACAO_PAGAMENTO:
-        return 0;
       case PedidoStatusEnum.RECEBIDO:
-        return 1;
+        return 0;
       case PedidoStatusEnum.EM_PREPARACAO:
-        return 2;
+        return 1;
       case PedidoStatusEnum.PRONTO:
-        return 3;
+        return 2;
       case PedidoStatusEnum.FINALIZADO:
-        return 4;
+        return 3;
 
       default:
         throw new InternalServerErrorException('Status Inválido');

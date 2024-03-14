@@ -1,7 +1,6 @@
 export enum PedidoStatusEnum {
-  AGUARDANDO_CONFIRMACAO_PAGAMENTO = 0,
-  RECEBIDO = 1,
-  EM_PREPARACAO = 2,
-  PRONTO = 3,
-  FINALIZADO = 4,
+  RECEBIDO = 0,
+  EM_PREPARACAO = 1,
+  PRONTO = 2,
+  FINALIZADO = 3,
 }
