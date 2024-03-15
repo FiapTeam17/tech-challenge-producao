@@ -37,9 +37,9 @@ export class PedidoItemRetornoDto {
 export class PedidoRetornoDto {
   @ApiProperty({
     description: 'Identificador do pedido',
-    example: '123456',
+    example: '1',
   })
-  public readonly identificadorPedido?: string;
+  public readonly identificadorPedido?: number;
 
   @ApiProperty({
     description: 'Observação',

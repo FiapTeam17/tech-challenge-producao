@@ -28,17 +28,16 @@ export class PedidoCriarDto {
   public readonly observacao?: string;
 
   @ApiProperty({
-    description: 'Identificacao do Pedido',
-    example: '98776755454',
-  })
-  public readonly identificacao?: string;
-
-
-  @ApiProperty({
-    description: 'Numero do pedido',
+    description: 'Identificação do pedido',
     example: '1',
   })
-  public readonly numero?: number;
+  public readonly identificacaoPedido?: number;
+
+  @ApiProperty({
+    description: 'Identificação do Cliente',
+    example: '98776755454',
+  })
+  public readonly identificacaoCliente?: string;
 
   @ApiProperty({
     description: 'Itens do Pedido',

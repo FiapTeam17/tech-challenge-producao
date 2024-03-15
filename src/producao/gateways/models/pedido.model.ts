@@ -31,7 +31,12 @@ export class PedidoModel {
   @Column({
     nullable: true,
   })
-  identificacaoPedido?: string;
+  identificacaoPedido?: number;
+
+  @Column({
+    nullable: true,
+  })
+  identificacaoCliente?: string;
 
   @OneToMany(() => PedidoItemModel, (item) => item.pedido)
   //@JoinTable()
@@ -44,6 +49,7 @@ export class PedidoModel {
       this.dataCadastro = pedidoDto.dataCadastro as never;
       this.dataConclusao = pedidoDto.dataConclusao;
       this.identificacaoPedido = pedidoDto.identificacaoPedido;
+      this.identificacaoCliente = pedidoDto.identificacaoCliente;
       this.itens = pedidoDto.itens?.map(i => new PedidoItemModel(i, this));
       const status = pedidoDto.status;
       if (status !== undefined) {
@@ -58,6 +64,7 @@ export class PedidoModel {
 
     return new PedidoDto(
       this.identificacaoPedido,
+      this.identificacaoCliente,
       StatusPedidoEnumMapper.numberParaEnum(this.status),
       this.dataCadastro,
       itens,

@@ -12,7 +12,8 @@ export class PedidoItemDto {
 
 export class PedidoDto {
   constructor(
-    public readonly identificacaoPedido: string,
+    public readonly identificacaoPedido: number,
+    public readonly identificacaoCliente: string,
     public readonly status: PedidoStatusEnum,
     public readonly dataCadastro: Date,
     public readonly itens?: PedidoItemDto[],

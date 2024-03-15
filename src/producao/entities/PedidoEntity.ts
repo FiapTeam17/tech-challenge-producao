@@ -51,12 +51,20 @@ export class PedidoEntity {
     this._itens = value;
   }
 
-  get identificacaoPedido(): string | undefined {
+  get identificacaoPedido(): number | undefined {
     return this._identificacaoPedido;
   }
 
-  set identificacaoPedido(value: string) {
+  set identificacaoPedido(value: number) {
     this._identificacaoPedido = value;
+  }
+
+  get identificacaoCliente(): string | undefined {
+    return this._identificacaoCliente;
+  }
+
+  set identificacaoCliente(value: string) {
+    this._identificacaoCliente = value;
   }
 
   constructor(
@@ -66,8 +74,8 @@ export class PedidoEntity {
     private _dataCadastro?: Date,
     private _dataConclusao?: Date,
     private _itens?: PedidoItemEntity[],
-
-    private _identificacaoPedido?: string,
+    private _identificacaoPedido?: number,
+    private _identificacaoCliente?: string,
   ) { }
 
   static getInstancia(id: number, status: PedidoStatusEnum): PedidoEntity {
@@ -143,6 +151,7 @@ export class PedidoEntity {
 
     return new PedidoDto(
       this.identificacaoPedido,
+      this._identificacaoCliente,
       this.status as never,
       this.dataCadastro as never,
       itens,
@@ -159,6 +168,9 @@ export class PedidoEntity {
       pedidoDto.status,
       pedidoDto.dataCadastro,
       pedidoDto.dataConclusao,
+      undefined,
+      pedidoDto.identificacaoPedido,
+      pedidoDto.identificacaoCliente,
     );
 
     pedido.itens = pedidoDto.itens?.map(i => {
