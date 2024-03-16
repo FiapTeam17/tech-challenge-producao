@@ -31,7 +31,7 @@ export class AtualizarStatusPedidoUseCase implements IAtualizarStatusPedidoUseCa
     await this.producaoRepositoryGateway.atualizarStatus(pedido.toPedidoDto());
 
     const filaProducao: any = {
-      idPedido: pedido.id,
+      idPedido: pedido.identificacaoPedido,
       status: StatusPedidoEnumMapper.enumParaString(pedido.getStatus())
     };
 
