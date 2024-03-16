@@ -1,24 +1,5 @@
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
-
-export class PedidoItemCriarDto {
-  @ApiProperty({
-    description: 'Quantidade do Item',
-    example: '5',
-  })
-  public quantidade?: number;
-
-  @ApiProperty({
-    description: 'Id do Produto',
-    example: '1',
-  })
-  public produtoId?: number;
-
-  @ApiProperty({
-    description: 'Nome do produto',
-    example: 'Coca',
-  })
-  public nomeProduto: string;
-}
+import { PedidoItemCriarDto } from './PedidoItemCriarDto';
 
 export class PedidoCriarDto {
   @ApiProperty({
@@ -41,10 +22,8 @@ export class PedidoCriarDto {
 
   @ApiProperty({
     description: 'Itens do Pedido',
-    type: 'array',
-    items: {
-      oneOf: [{ $ref: getSchemaPath(PedidoItemCriarDto) }],
-    },
+    isArray: true,
+    type: () => PedidoItemCriarDto,
   })
   public readonly itens: PedidoItemCriarDto[];
 }
