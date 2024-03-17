@@ -51,12 +51,20 @@ export class PedidoEntity {
     this._itens = value;
   }
 
-  get identificacaoPedido(): string | undefined {
+  get identificacaoPedido(): number | undefined {
     return this._identificacaoPedido;
   }
 
-  set identificacaoPedido(value: string) {
+  set identificacaoPedido(value: number) {
     this._identificacaoPedido = value;
+  }
+
+  get identificacaoCliente(): string | undefined {
+    return this._identificacaoCliente;
+  }
+
+  set identificacaoCliente(value: string) {
+    this._identificacaoCliente = value;
   }
 
   constructor(
@@ -66,8 +74,8 @@ export class PedidoEntity {
     private _dataCadastro?: Date,
     private _dataConclusao?: Date,
     private _itens?: PedidoItemEntity[],
-
-    private _identificacaoPedido?: string,
+    private _identificacaoPedido?: number,
+    private _identificacaoCliente?: string,
   ) { }
 
   static getInstancia(id: number, status: PedidoStatusEnum): PedidoEntity {
@@ -79,29 +87,6 @@ export class PedidoEntity {
 
   setStatus(newStatus: PedidoStatusEnum) {
     switch (newStatus) {
-      case PedidoStatusEnum.AGUARDANDO_CONFIRMACAO_PAGAMENTO:
-        if (
-          this._status === undefined ||
-          this._status === PedidoStatusEnum.AGUARDANDO_CONFIRMACAO_PAGAMENTO
-        ) {
-          this._status = newStatus;
-          return;
-        }
-        throw new BadRequestException(
-          'O status do pedido não permite essa alteração',
-        );
-
-      case PedidoStatusEnum.RECEBIDO:
-        if (
-          this._status === PedidoStatusEnum.AGUARDANDO_CONFIRMACAO_PAGAMENTO
-        ) {
-          this._status = newStatus;
-          break;
-        }
-        throw new BadRequestException(
-          'O status do pedido não permite essa alteração',
-        );
-
       case PedidoStatusEnum.EM_PREPARACAO:
         if (this._status === PedidoStatusEnum.RECEBIDO) {
           this._status = newStatus;
@@ -166,6 +151,7 @@ export class PedidoEntity {
 
     return new PedidoDto(
       this.identificacaoPedido,
+      this._identificacaoCliente,
       this.status as never,
       this.dataCadastro as never,
       itens,
@@ -182,6 +168,9 @@ export class PedidoEntity {
       pedidoDto.status,
       pedidoDto.dataCadastro,
       pedidoDto.dataConclusao,
+      undefined,
+      pedidoDto.identificacaoPedido,
+      pedidoDto.identificacaoCliente,
     );
 
     pedido.itens = pedidoDto.itens?.map(i => {

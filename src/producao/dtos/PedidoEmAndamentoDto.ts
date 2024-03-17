@@ -1,11 +1,11 @@
 import { PedidoEntity } from '../entities';
 import { PedidoStatusEnum } from '../types';
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
-import { PedidoItemDto } from './PedidoDto';
+import { PedidoItemDto } from './PedidoItemDto';
 
 export class PedidoEmAndamentoDto {
   @ApiProperty({
-    description: 'Identificador do Pedido',
+    description: 'Chave Primaria',
     example: '123456',
   })
   public readonly id?: number;
@@ -17,10 +17,16 @@ export class PedidoEmAndamentoDto {
   public readonly observacao?: string;
 
   @ApiProperty({
-    description: 'Cliente',
+    description: 'Identificador do Pedido',
     example: '123456',
   })
-  public readonly clienteId?: number;
+  public readonly identificacaoPedido?: number;
+
+  @ApiProperty({
+    description: 'Identificação do Cliente',
+    example: '123456',
+  })
+  public readonly identificacaoCliente?: string;
 
   @ApiProperty({
     description: 'Status',
@@ -53,6 +59,8 @@ export class PedidoEmAndamentoDto {
   constructor(pedido: PedidoEntity) {
     this.id = pedido.id;
     this.observacao = pedido.observacao;
+    this.identificacaoPedido = pedido.identificacaoPedido;
+    this.identificacaoCliente = pedido.identificacaoCliente;
     this.status = pedido.status;
     this.dataCadastro = pedido.dataCadastro;
     this.tempoEspera = pedido.tempoEspera();

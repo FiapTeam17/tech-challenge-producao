@@ -1,45 +1,27 @@
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
-import { PedidoDto, PedidoItemDto } from './PedidoDto';
 import { PedidoStatusEnum } from '../types';
+import { PedidoItemRetornoDto } from './PedidoItemRetornoDto';
+import { PedidoDto } from './PedidoDto';
+import { PedidoItemDto } from './PedidoItemDto';
 
-export class PedidoItemRetornoDto {
+export class PedidoRetornoDto {
   @ApiProperty({
-    description: 'Identificador do Item',
+    description: 'Chave Primaria',
     example: '123456',
   })
   public readonly id?: number;
 
   @ApiProperty({
-    description: 'Quantidade do Item',
-    example: '5',
-  })
-  public quantidade?: number;
-
-  @ApiProperty({
-    description: 'Nome do Produto',
-    example: 'Guaraná',
-  })
-  public nomeProduto?: string;
-
-  @ApiProperty({
-    description: 'Id do produto',
-    example: '5',
-  })
-  public idProduto?: number;
-
-  @ApiProperty({
-    description: 'Id do Pedido',
+    description: 'Identificador do Pedido',
     example: '123456',
   })
-  public pedidoId?: number;
-}
+  public readonly identificacaoPedido?: number;
 
-export class PedidoRetornoDto {
   @ApiProperty({
-    description: 'Identificador do pedido',
+    description: 'Identificação do Cliente',
     example: '123456',
   })
-  public readonly identificadorPedido?: string;
+  public readonly identificacaoCliente?: string;
 
   @ApiProperty({
     description: 'Observação',
@@ -67,6 +49,7 @@ export class PedidoRetornoDto {
     return {
       id: pedido.id,
       identificadorPedido: pedido.identificacaoPedido,
+      identificacaoCliente: pedido.identificacaoCliente,
       observacao: pedido.observacao,
       status: pedido.status,
       itens: pedido.itens?.map((i) => PedidoRetornoDto.getItemInstance(i)),
